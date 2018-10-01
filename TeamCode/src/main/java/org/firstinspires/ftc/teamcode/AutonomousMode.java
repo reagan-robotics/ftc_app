@@ -108,9 +108,13 @@ public class AutonomousMode extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+
+        // lower the robot
+
+
+        //encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
      
         sleep(1000);     // pause for servos to move
@@ -118,7 +122,58 @@ public class AutonomousMode extends LinearOpMode {
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
+    public void encoderHook(double speed,
+                             double inches,
+                             double timeoutS) {
+        int newTarget;
 
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newTarget = robot.liftoffHook.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+
+            robot.liftoffHook.setTargetPosition(newTarget);
+
+
+            // Turn On RUN_TO_POSITION
+            robot.liftoffHook.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.liftoffHook.setPower(Math.abs(speed));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.liftoffHook.isBusy())){
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newTarget,
+                        robot.liftoffHook.getCurrentPosition());
+
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.liftoffHook.setPower(0);
+
+
+            // Turn off RUN_TO_POSITION
+            robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
     /*
      *  Method to perfmorm a relative move, based on encoder counts.
      *  Encoders are not reset as the move is based on the current position.
