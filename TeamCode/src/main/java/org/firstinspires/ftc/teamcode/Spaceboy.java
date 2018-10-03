@@ -57,6 +57,8 @@ public class Spaceboy
     public DcMotor  liftoffHook    = null;
     public static double ARM_UP_POWER = 1.0;
     public static double ARM_DOWN_POWER = -1.0;
+    public static double ARM_UP_INCHES = 5;
+    public static double ARM_DOWN_INCHES = -5;
 
 
     /* local OpMode members. */

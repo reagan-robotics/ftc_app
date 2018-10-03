@@ -122,6 +122,7 @@ public class AutonomousMode extends LinearOpMode {
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
+
     public void encoderHook(double speed,
                              double inches,
                              double timeoutS) {
@@ -234,5 +235,10 @@ public class AutonomousMode extends LinearOpMode {
 
             //  sleep(250);   // optional pause after each move
         }
+    }
+    public void lowerHook() {
+
+        encoderHook(0.2, 3,5);
+
     }
 }
