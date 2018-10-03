@@ -27,11 +27,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -42,15 +41,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -92,7 +91,6 @@ import java.util.List;
  */
 
 @TeleOp(name="Concept: Vuforia Rover Nav", group ="Concept")
-@Disabled
 public class ConceptVuforiaNavRoverRuckus extends LinearOpMode {
 
     /*
@@ -107,7 +105,7 @@ public class ConceptVuforiaNavRoverRuckus extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "ATdIjmP/////AAAAGSE1me17PUZ1i4QHHo1LJ/8mOWNWjtJ47Azk7ERj6HuW4Jxg24TL5rFjV1fzpY9G7AZ2HAaT4C1xx+Yw0ynZWrr0bVchGU1edbXTzMqJel5/0nobvrkf5Y8n+qWsNpubGFeQ+TUAgMDc6ioT55CayEEUmK/ET7V4nMA0iLbcBoPojw1odL23xPJM/PXtBh/k68H+anvj/iC2tC7l4y/7s74j544fOmvCiatEifESWufXMwJJLNRe+820QKankhY2EUuZpKkITP06mZAOLbJ2GPS92+mySeBHShJ9GghGnAbY/zumkmgXTxKWUsmhBQIEC7qRsoySGME69iIQz/RRZN1gXGUU0XaxwpocoX7qtc93";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
