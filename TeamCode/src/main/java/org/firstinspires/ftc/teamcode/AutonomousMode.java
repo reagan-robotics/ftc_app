@@ -29,10 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -61,13 +59,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="drive", group="Pushbot")
+@Autonomous(name="Pushbot: Hi", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
     //oprivate RoverNav roverNav = null;
     private ElapsedTime     runtime = new ElapsedTime();
+    private RoverNav roverNav = null;
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
@@ -81,6 +80,39 @@ public class AutonomousMode extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.45;
     static final double     TURN_SPEED              = 0.35;
 
+    public void findLocation() {
+        roverNav.updateCurrentLocation();
+
+        VuforiaTrackable trackable = roverNav.getCurrentTrackable();
+
+        if(trackable != null) {
+            telemetry.addData("Visible Target", roverNav.getCurrentTrackable().getName());
+        }else {
+            telemetry.addData("No Visible Target", "none");
+        }
+
+        VectorF translation = roverNav.getCurrentTranslation();
+        if (translation !=null) {
+            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0) / roverNav.mmPerInch,
+                    translation.get(1) / roverNav.mmPerInch,
+                    translation.get(2) / roverNav.mmPerInch);
+        }else{
+            telemetry.addData("No Translation", "none");
+        }
+
+        Orientation rotation = roverNav.getCurrentRotation();
+        if (rotation !=null) {
+            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f",
+                    rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+        }else{
+            telemetry.addData("No Rotation", "none");
+        }
+
+        telemetry.update();
+
+    }
+
     @Override
     public void runOpMode() {
 
@@ -89,7 +121,7 @@ public class AutonomousMode extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        //roverNav = new RoverNav(hardwareMap);
+        roverNav = new RoverNav(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -109,7 +141,25 @@ public class AutonomousMode extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        engage();
+
+        roverNav.activate();
+
+        // Step through each leg of the path,
+        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+
+        // lower the robot
+
+        while (opModeIsActive()) {
+            findLocation();
+        }
+        //encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+
+
+        sleep(1000);     // pause for servos to move
+
+        telemetry.addData("Path", "Complete");
         telemetry.update();
     }
 
