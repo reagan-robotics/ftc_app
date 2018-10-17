@@ -30,6 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 
 
 /**
@@ -59,7 +62,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Pushbot: Hi", group="Pushbot")
+@Autonomous(name="Pushbot: Auto Drive By Encoder", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -149,9 +152,10 @@ public class AutonomousMode extends LinearOpMode {
 
         // lower the robot
 
-        while (opModeIsActive()) {
-            findLocation();
-        }
+        lowerRobot();
+
+
+
         //encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
         //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
         //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
@@ -159,7 +163,8 @@ public class AutonomousMode extends LinearOpMode {
 
         sleep(1000);     // pause for servos to move
 
-        telemetry.addData("Path", "Complete");
+        sleep(1000);     // pause for servos to move
+;
         telemetry.update();
     }
 
