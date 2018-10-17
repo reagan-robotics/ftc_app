@@ -66,6 +66,7 @@ public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
+    private RoverNav roverNav = null;
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
@@ -88,6 +89,7 @@ public class AutonomousMode extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
+        roverNav = new RoverNav(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
