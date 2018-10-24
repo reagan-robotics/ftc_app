@@ -69,9 +69,9 @@ public class AutonomousMode extends LinearOpMode {
     private RoverNav roverNav = null;
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_INCHES   = 4.5 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * Math.PI);
     static final double     HOOK_PER_MOTOR_REV      = 420;
@@ -115,6 +115,10 @@ public class AutonomousMode extends LinearOpMode {
 
         // lower the robot
 
+        //lowerRobot();
+        //spinRobot(180);
+        sleep(1000);
+        encoderDrive(DRIVE_SPEED, 120, 120, 5);
         lowerRobot();
 
 
@@ -179,6 +183,16 @@ public class AutonomousMode extends LinearOpMode {
 
             //  sleep(250);   // optional pause after each move
         }
+    }
+    private void spinRobot (double degrees){
+        //calculate circumference
+
+        double circumference = 15.0 * Math.PI;
+
+        //calculate distance
+        double distance = degrees/360.0 * circumference;
+
+        encoderDrive (TURN_SPEED, distance, -distance, 5);
     }
     /*
      *  Method to perfmorm a relative move, based on encoder counts.
