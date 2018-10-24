@@ -152,6 +152,10 @@ public class AutonomousMode extends LinearOpMode {
 
         // lower the robot
 
+        //lowerRobot();
+        //spinRobot(180);
+        sleep(1000);
+        encoderDrive(DRIVE_SPEED, 120, 120, 5);
         lowerRobot();
 
 
