@@ -256,6 +256,31 @@ public class AutonomousMode extends LinearOpMode {
         }
     }
 
+    private void parkRobot() {
+        /*
+        lower
+
+        spin 180 degrees
+
+        move backwards 20 inches
+
+        turn left 90 degrees
+
+        move forward 36 inches
+
+        detect picture
+
+        determine which direction to turn depending on picture seen
+
+        Crater/BackSpace means turn left 120 degrees
+
+        Foot/Rover means turn right 30 degrees
+
+        move forward 24 inches
+         */
+
+    }
+
     public void lowerRobot() {
         encoderHook(0.5, -4,30);
         encoderHook(0.5, 4,30);
