@@ -79,8 +79,8 @@ public class Spaceboy
         motorLeft  = hwMap.get(DcMotor.class, "motor_left");
         motorRight = hwMap.get(DcMotor.class, "motor_right");
         liftoffHook    = hwMap.get(DcMotor.class, "liftoff_hook");
-        motorLeft.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motorRight.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        motorLeft.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motorRight.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 
         // Set all motors to zero power
         motorLeft.setPower(0);

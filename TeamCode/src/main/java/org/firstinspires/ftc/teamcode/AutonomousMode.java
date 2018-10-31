@@ -61,7 +61,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Pushbot: Auto Drive By Encoder", group="Pushbot")
+@Autonomous(name="Pushbot: Forward By Encoder", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -78,7 +78,7 @@ public class AutonomousMode extends LinearOpMode {
     static final double     AXLE_DIAMETER_INCHES    = 0.235;
     static final double     HOOK_COUNTS_PER_INCH    =(HOOK_PER_MOTOR_REV * 1/
                                                       AXLE_DIAMETER_INCHES * Math.PI);
-    static final double     DRIVE_SPEED             = 0.6;
+    static final double     DRIVE_SPEED             = 0.4;
     static final double     TURN_SPEED              = 0.5;
 
     @Override
@@ -117,19 +117,8 @@ public class AutonomousMode extends LinearOpMode {
 
         //lowerRobot();
         //spinRobot(180);
-        sleep(1000);
-        encoderDrive(DRIVE_SPEED, 120, 120, 5);
-        lowerRobot();
-
-
-
-        //encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
-
-     
-        sleep(1000);     // pause for servos to move
-;
+        //parkRobot();
+        encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
 
@@ -212,8 +201,8 @@ public class AutonomousMode extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.motorLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.motorRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newLeftTarget = (robot.motorLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH));
+            newRightTarget = (robot.motorRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
             robot.motorLeft.setTargetPosition(newLeftTarget);
             robot.motorRight.setTargetPosition(newRightTarget);
 
@@ -226,12 +215,6 @@ public class AutonomousMode extends LinearOpMode {
             robot.motorLeft.setPower(Math.abs(speed));
             robot.motorRight.setPower(Math.abs(speed));
 
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
                    (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
@@ -258,31 +241,28 @@ public class AutonomousMode extends LinearOpMode {
 
     private void parkRobot() {
         /*
-        lower
-
-        spin 180 degrees
-
-        move backwards 20 inches
-
-        turn left 90 degrees
-
-        move forward 36 inches
-
-        detect picture
-
-        determine which direction to turn depending on picture seen
-
-        Crater/BackSpace means turn left 120 degrees
-
-        Foot/Rover means turn right 30 degrees
-
-        move forward 24 inches
-         */
-
+        lower*/
+        /*lowerRobot();*/
+        /*spin 180 degrees*/
+        spinRobot(180);
+        /*move backwards 20 inches*/
+        encoderDrive(DRIVE_SPEED,-20,-20,5);
+        /*turn left 90 degrees*/
+        spinRobot(-90);
+        /* move forward 36 inches*/
+        encoderDrive(DRIVE_SPEED,36,36,5);
+        /*detect picture*/
+        /*determine which direction to turn depending on picture seen*/
+        /*Crater/BackSpace means turn left 120 degrees*/
+        spinRobot(-120);
+        /*Foot/Rover means turn right 30 degrees*/
+        spinRobot(30);
+        /*move forward 24 inches */
+        encoderDrive(DRIVE_SPEED,24,24,5);
     }
 
     public void lowerRobot() {
-        encoderHook(0.5, -4,30);
-        encoderHook(0.5, 4,30);
+        encoderHook(0.5, -4,5);
+        encoderHook(0.5, 4,5);
     }
 }
