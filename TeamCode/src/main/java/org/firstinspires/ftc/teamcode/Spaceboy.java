@@ -31,6 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -54,11 +56,13 @@ public class Spaceboy
     /* Public OpMode members. */
     public DcMotor  motorLeft   = null;
     public DcMotor  motorRight  = null;
-    public DcMotor  liftoffHook    = null;
-    public static double ARM_UP_POWER = 1.0;
-    public static double ARM_DOWN_POWER = -1.0;
+    public DcMotor  liftoffHook = null;
+    public Servo    tokenDrop   = null;
+    public static double ARM_UP_POWER = 100;
+    public static double ARM_DOWN_POWER = -100;
     public static double ARM_UP_INCHES = 5;
     public static double ARM_DOWN_INCHES = -5;
+    public TouchSensor hookTouch = null;
 
 
     /* local OpMode members. */
@@ -79,8 +83,11 @@ public class Spaceboy
         motorLeft  = hwMap.get(DcMotor.class, "motor_left");
         motorRight = hwMap.get(DcMotor.class, "motor_right");
         liftoffHook    = hwMap.get(DcMotor.class, "liftoff_hook");
+        tokenDrop   = hwMap.get(Servo.class, "token_drop");
         motorLeft.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         motorRight.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        hookTouch = hwMap.get(TouchSensor.class, "hookTouch");
+
 
         // Set all motors to zero power
         motorLeft.setPower(0);

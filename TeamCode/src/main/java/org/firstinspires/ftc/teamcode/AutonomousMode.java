@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -115,10 +117,11 @@ public class AutonomousMode extends LinearOpMode {
 
         // lower the robot
 
-        //lowerRobot();
-        //spinRobot(180);
-        //parkRobot();
-        encoderDrive(DRIVE_SPEED, 48, 48, 10);
+        /*lowerRobot();
+
+        spinRobot(180);*/
+        parkRobot();
+        //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
 
@@ -133,7 +136,6 @@ public class AutonomousMode extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             newTarget = robot.liftoffHook.getCurrentPosition() + (int)(inches * HOOK_COUNTS_PER_INCH);
-
             robot.liftoffHook.setTargetPosition(newTarget);
 
 
@@ -243,26 +245,39 @@ public class AutonomousMode extends LinearOpMode {
         /*
         lower*/
         /*lowerRobot();*/
+        lowerRobot();
         /*spin 180 degrees*/
-        spinRobot(180);
+        /*spinRobot(180);*/
+        encoderDrive(DRIVE_SPEED,0, 10,5);
         /*move backwards 20 inches*/
         encoderDrive(DRIVE_SPEED,-20,-20,5);
-        /*turn left 90 degrees*/
-        spinRobot(-90);
-        /* move forward 36 inches*/
-        encoderDrive(DRIVE_SPEED,36,36,5);
+        /*turn left 100 degrees*/
+        spinRobot(-100);
+        /* move forward 18 inches*/
+        encoderDrive(DRIVE_SPEED,18,18,5);
+
         /*detect picture*/
+        VuforiaTrackable location = roverNav.getCurrentTrackable();
+        if(location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
+            /* move forward 18 inches*/
+            encoderDrive(DRIVE_SPEED,18,18,5);
+            /*Crater/BackSpace means turn left 120 degrees*/
+            spinRobot(-120);
+        }else{
+            /* move forward 18 inches*/
+            encoderDrive(DRIVE_SPEED,18,18,5);
+            /*Foot/Rover means turn right 30 degrees*/
+            spinRobot(30);
+        }
+
         /*determine which direction to turn depending on picture seen*/
-        /*Crater/BackSpace means turn left 120 degrees*/
-        spinRobot(-120);
-        /*Foot/Rover means turn right 30 degrees*/
-        spinRobot(30);
+
         /*move forward 24 inches */
-        encoderDrive(DRIVE_SPEED,24,24,5);
+        encoderDrive(DRIVE_SPEED,36,36,5);
     }
 
     public void lowerRobot() {
-        encoderHook(0.5, -4,5);
-        encoderHook(0.5, 4,5);
+        /*encoderHook(0.5, -1,5);*/
+        encoderHook(0.5, 11,5);  //Hook going up is POSITIVE distance
     }
 }

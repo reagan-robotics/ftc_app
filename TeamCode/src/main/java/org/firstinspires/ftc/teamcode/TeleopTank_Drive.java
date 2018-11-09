@@ -90,15 +90,15 @@ public class TeleopTank_Drive extends OpMode{
         double right;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = gamepad1.left_stick_y;
-        right = gamepad1.right_stick_y;
+        left = -gamepad1.left_stick_y;
+        right = -gamepad1.right_stick_y;
 
         robot.motorLeft.setPower(left);
         robot.motorRight.setPower(right);
 
-        if (gamepad1.y)
+        if (gamepad1.right_bumper)
             robot.liftoffHook.setPower(robot.ARM_UP_POWER);
-        else if (gamepad1.a)
+        else if ((gamepad1.right_trigger>0.1) && !robot.hookTouch.isPressed())
             robot.liftoffHook.setPower(robot.ARM_DOWN_POWER);
         else
             robot.liftoffHook.setPower(0.0);
