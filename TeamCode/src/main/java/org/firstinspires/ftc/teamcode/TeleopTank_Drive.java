@@ -93,8 +93,8 @@ public class TeleopTank_Drive extends OpMode{
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
 
-        robot.motorLeft.setPower(left);
-        robot.motorRight.setPower(right);
+        robot.motorLeft.setPower(.25*left);
+        robot.motorRight.setPower(.25*right);
 
         if (gamepad1.right_bumper)
             robot.liftoffHook.setPower(robot.ARM_UP_POWER);
