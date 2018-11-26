@@ -1,3 +1,32 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -6,9 +35,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class Op_Mode_Bread.java {
-}{
-    //
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -37,22 +63,22 @@ public class Op_Mode_Bread.java {
  */
 
 @Autonomous(name="Pushbot: BigSign", group="Pushbot")
-public class Op_Mode_Bread extends LinearOpMode {
+public class AutonomousMode_bigsign extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
     private RoverNav roverNav = null;
-    private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.5 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * Math.PI);
+                                                      (WHEEL_DIAMETER_INCHES * Math.PI);
     static final double     HOOK_PER_MOTOR_REV      = 420;
     static final double     AXLE_DIAMETER_INCHES    = 0.235;
     static final double     HOOK_COUNTS_PER_INCH    =(HOOK_PER_MOTOR_REV * 1/
-            AXLE_DIAMETER_INCHES * Math.PI);
+                                                      AXLE_DIAMETER_INCHES * Math.PI);
     static final double     DRIVE_SPEED             = 0.5;
     static final double     TURN_SPEED              = 0.5;
 
@@ -78,8 +104,8 @@ public class Op_Mode_Bread extends LinearOpMode {
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0",  "Starting at %7d :%7d",
-                robot.motorLeft.getCurrentPosition(),
-                robot.motorRight.getCurrentPosition());
+                          robot.motorLeft.getCurrentPosition(),
+                          robot.motorRight.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -91,11 +117,16 @@ public class Op_Mode_Bread extends LinearOpMode {
         // lower the robot
 
         /*lowerRobot();
-  }
+
+        spinRobot(180);*/
+        parkRobot();
+        //encoderDrive(DRIVE_SPEED, 48, 48, 10);
+        telemetry.update();
+    }
 
     public void encoderHook(double speed,
-                            double inches,
-                            double timeoutS) {
+                             double inches,
+                             double timeoutS) {
         int newTarget;
 
 
@@ -187,21 +218,66 @@ public class Op_Mode_Bread extends LinearOpMode {
             robot.motorRight.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
+                   (runtime.seconds() < timeoutS) &&
+                   (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
                 telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.motorLeft.getCurrentPosition(),
-                        robot.motorRight.getCurrentPosition());
+                                            robot.motorLeft.getCurrentPosition(),
+                                            robot.motorRight.getCurrentPosition());
                 telemetry.update();
             }
+
+            // Stop all motion;
+            robot.motorLeft.setPower(0);
+            robot.motorRight.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
+
+    private void drive(double inches) {
+        encoderDrive(DRIVE_SPEED, inches, inches, 5);
+        sleep(250);
+    }
+
+    private void parkRobot() {
+        drive(18);
+        spinRobot(80);
+        drive(45);
+        spinRobot(-130);
+        drive(45);
+        spinRobot(-90);
+        robot.tokenDrop.setDirection(Servo.Direction.FORWARD);
+        robot.tokenDrop.setPosition(100);
+        robot.tokenDrop.setDirection(Servo.Direction.REVERSE);
+        robot.tokenDrop.setPosition(100);
+        spinRobot(180);
+        sleep(250);
+        drive(50);
+        /*detect picture
+        VuforiaTrackable location = roverNav.getCurrentTrackable();
+        while (location == null){
+            roverNav.updateCurrentLocation();
+            location = roverNav.getCurrentTrackable();
+            telemetry.addData("Looking for trackable", "Now");
+            telemetry.update();
+        }
+
+        if(location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
+            turnDegrees=90;
+        }else {
+            turnDegrees = -90;
+        }*/
     }
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
         encoderHook(0.5, 11,5);  //Hook going up is POSITIVE distance
     }
-}
 }

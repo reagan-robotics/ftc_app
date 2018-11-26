@@ -63,8 +63,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Pushbot: Forward By Encoder", group="Pushbot")
-public class AutonomousMode extends LinearOpMode {
+@Autonomous(name="Pushbot: ResetHook", group="Pushbot")
+public class ResetHook extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
@@ -116,11 +116,12 @@ public class AutonomousMode extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
         // lower the robot
+        resetHook();
 
-        lowerRobot();
+        /*lowerRobot();
 
-        spinRobot(180);
-        parkRobot();
+        spinRobot(180);*/
+        /*parkRobot();*/
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
@@ -163,6 +164,7 @@ public class AutonomousMode extends LinearOpMode {
                         robot.liftoffHook.getCurrentPosition());
                 telemetry.update();
             }
+
             // Stop all motion;
             robot.liftoffHook.setPower(0);
 
@@ -227,6 +229,7 @@ public class AutonomousMode extends LinearOpMode {
                                             robot.motorRight.getCurrentPosition());
                 telemetry.update();
             }
+
             // Stop all motion;
             robot.motorLeft.setPower(0);
             robot.motorRight.setPower(0);
@@ -246,7 +249,7 @@ public class AutonomousMode extends LinearOpMode {
         lowerRobot();
         /*spin 180 degrees*/
         /*spinRobot(180);*/
-        encoderDrive(DRIVE_SPEED,0, 10,5);
+        encoderDrive(DRIVE_SPEED,0, 5,5);
         /*move backwards 20 inches*/
         encoderDrive(DRIVE_SPEED,-20,-20,5);
         /*turn left 100 degrees*/
@@ -267,14 +270,23 @@ public class AutonomousMode extends LinearOpMode {
             /*Foot/Rover means turn right 30 degrees*/
             spinRobot(30);
         }
+
         /*determine which direction to turn depending on picture seen*/
 
         /*move forward 24 inches */
         encoderDrive(DRIVE_SPEED,36,36,5);
     }
 
-    public void lowerRobot() {
-        /*encoderHook(0.5, -1,5);*/
-        encoderHook(0.5, 11,5);  //Hook going up is POSITIVE distance
+    public void lowerRobot(){
+        encoderHook(0.5, -1,5);
+        /*encoderHook(0.5, 8,5);*/
+    }
+    private void resetHook(){
+        robot.liftoffHook.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.liftoffHook.setPower(-25);
+        while(!robot.hookTouch.isPressed()) {
+
+        }
+        robot.liftoffHook.setPower(0);
     }
 }

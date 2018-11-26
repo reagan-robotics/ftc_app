@@ -63,8 +63,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Pushbot: Forward By Encoder", group="Pushbot")
-public class AutonomousMode extends LinearOpMode {
+@Autonomous(name="Pushbot: Lower and Spin", group="Pushbot")
+public class AutonomousMode_LowerSpin extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
@@ -119,8 +119,8 @@ public class AutonomousMode extends LinearOpMode {
 
         lowerRobot();
 
-        spinRobot(180);
-        parkRobot();
+        spinRobot(-180);
+        //parkRobot();
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
