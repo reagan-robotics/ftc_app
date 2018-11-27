@@ -274,7 +274,7 @@ public class RoverNav {
         targetsRoverRuckus.activate();
     }
 
-    public void updateCurrentLocation() {
+    public boolean updateCurrentLocation() {
             // check all the trackable target to see which one (if any) is visible.
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
@@ -299,10 +299,13 @@ public class RoverNav {
                 // express the rotation of the robot in degrees.
                 currentRotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             }
+
+            return targetVisible;
     }
 
-    //telemetry.addData("Visible Target", trackable.getName());
+    // telemetry.addData("Visible Target", trackable.getName());
     public VuforiaTrackable getCurrentTrackable(){
+        updateCurrentLocation();
         return currentTrackable;
     }
 

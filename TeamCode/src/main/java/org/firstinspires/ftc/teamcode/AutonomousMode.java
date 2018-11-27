@@ -63,7 +63,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Pushbot: Forward By Encoder", group="Pushbot")
+@Autonomous(name="Autonomous", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -112,15 +112,7 @@ public class AutonomousMode extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-
-        // lower the robot
-
-        lowerRobot();
-
-        spinRobot(180);
-        parkRobot();
+        engage();
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
@@ -239,24 +231,27 @@ public class AutonomousMode extends LinearOpMode {
         }
     }
 
-    private void parkRobot() {
-        /*
-        lower*/
-        /*lowerRobot();*/
-        lowerRobot();
-        /*spin 180 degrees*/
-        /*spinRobot(180);*/
-        encoderDrive(DRIVE_SPEED,0, 10,5);
-        /*move backwards 20 inches*/
-        encoderDrive(DRIVE_SPEED,-20,-20,5);
-        /*turn left 100 degrees*/
-        spinRobot(-100);
+    private void engage() {
+         /*lowerRobot();*/
+
+
+        spinRobot(-130);
         /* move forward 18 inches*/
         encoderDrive(DRIVE_SPEED,18,18,5);
 
         /*detect picture*/
         VuforiaTrackable location = roverNav.getCurrentTrackable();
-        if(location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
+        while(location == null){
+            telemetry.addData("Message", "Searching For Location...");
+            telemetry.update();
+            roverNav.updateCurrentLocation();
+            location = roverNav.getCurrentTrackable();
+        }
+
+        telemetry.addData("Found", location.getName());
+        telemetry.update();
+
+        if(location != null && location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
             /* move forward 18 inches*/
             encoderDrive(DRIVE_SPEED,18,18,5);
             /*Crater/BackSpace means turn left 120 degrees*/
@@ -270,7 +265,7 @@ public class AutonomousMode extends LinearOpMode {
         /*determine which direction to turn depending on picture seen*/
 
         /*move forward 24 inches */
-        encoderDrive(DRIVE_SPEED,36,36,5);
+        encoderDrive(DRIVE_SPEED,24,24,5);
     }
 
     public void lowerRobot() {
