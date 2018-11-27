@@ -63,7 +63,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Pushbot: Forward By Encoder", group="Pushbot")
+@Autonomous(name="Autonomous", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
