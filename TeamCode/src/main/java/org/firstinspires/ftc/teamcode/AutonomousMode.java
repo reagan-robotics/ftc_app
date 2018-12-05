@@ -34,8 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -68,7 +66,7 @@ public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
-    private RoverNav roverNav = null;
+    //oprivate RoverNav roverNav = null;
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
@@ -91,7 +89,7 @@ public class AutonomousMode extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        roverNav = new RoverNav(hardwareMap);
+        //roverNav = new RoverNav(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -111,8 +109,6 @@ public class AutonomousMode extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
-        engage();
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
@@ -231,41 +227,36 @@ public class AutonomousMode extends LinearOpMode {
         }
     }
 
+    private void driveRobot(double distance) {
+        encoderDrive(DRIVE_SPEED, distance, distance, 5);
+    }
+    private void dropToken() {
+
+        robot.tokenDrop.setPosition(0);
+        try{
+            Thread.sleep(2000);
+        }catch(InterruptedException e){
+            System.out.println("got interrupted!");
+        }
+        robot.tokenDrop.setPosition(0.5);
+    }
+
     private void engage() {
          /*lowerRobot();*/
-
-
-        spinRobot(-130);
+        spinRobot(-180);
+        driveRobot(23);
         /* move forward 18 inches*/
-        encoderDrive(DRIVE_SPEED,18,18,5);
+        spinRobot(-105);
+        //encoderDrive(DRIVE_SPEED,18,18,5);
+       // spinRobot(30);
+        driveRobot(62.5);
+        spinRobot(-47);
+        driveRobot(30);
+        spinRobot(-90);
+        dropToken();
+        spinRobot(-100);
+        driveRobot(75);
 
-        /*detect picture*/
-        VuforiaTrackable location = roverNav.getCurrentTrackable();
-        while(location == null){
-            telemetry.addData("Message", "Searching For Location...");
-            telemetry.update();
-            roverNav.updateCurrentLocation();
-            location = roverNav.getCurrentTrackable();
-        }
-
-        telemetry.addData("Found", location.getName());
-        telemetry.update();
-
-        if(location != null && location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
-            /* move forward 18 inches*/
-            encoderDrive(DRIVE_SPEED,18,18,5);
-            /*Crater/BackSpace means turn left 120 degrees*/
-            spinRobot(-120);
-        }else{
-            /* move forward 18 inches*/
-            encoderDrive(DRIVE_SPEED,18,18,5);
-            /*Foot/Rover means turn right 30 degrees*/
-            spinRobot(30);
-        }
-        /*determine which direction to turn depending on picture seen*/
-
-        /*move forward 24 inches */
-        encoderDrive(DRIVE_SPEED,24,24,5);
     }
 
     public void lowerRobot() {

@@ -34,8 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -77,9 +75,9 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * Math.PI);
     static final double     HOOK_PER_MOTOR_REV      = 420;
-    static final double     AXLE_DIAMETER_INCHES    = 0.235;
+    static final double     AXLE_DIAMETER_INCHES    = 0.35;
     static final double     HOOK_COUNTS_PER_INCH    =(HOOK_PER_MOTOR_REV * 1/
-                                                      AXLE_DIAMETER_INCHES * Math.PI);
+            (AXLE_DIAMETER_INCHES * Math.PI));
     static final double     DRIVE_SPEED             = 0.4;
     static final double     TURN_SPEED              = 0.5;
 
@@ -91,7 +89,7 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        roverNav = new RoverNav(hardwareMap);
+        //roverNav = new RoverNav(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -109,6 +107,7 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
                           robot.motorRight.getCurrentPosition());
         telemetry.update();
 
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -119,7 +118,7 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
 
         lowerRobot();
 
-        spinRobot(-180);
+        spinRobot(-190);
         //parkRobot();
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
@@ -129,15 +128,11 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
                              double inches,
                              double timeoutS) {
         int newTarget;
-
-
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
-
             // Determine new target position, and pass to motor controller
             newTarget = robot.liftoffHook.getCurrentPosition() + (int)(inches * HOOK_COUNTS_PER_INCH);
             robot.liftoffHook.setTargetPosition(newTarget);
-
 
             // Turn On RUN_TO_POSITION
             robot.liftoffHook.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -255,8 +250,9 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
         encoderDrive(DRIVE_SPEED,18,18,5);
 
         /*detect picture*/
-        VuforiaTrackable location = roverNav.getCurrentTrackable();
-        if(location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
+        //VuforiaTrackable location = roverNav.getCurrentTrackable();
+
+        if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
             /* move forward 18 inches*/
             encoderDrive(DRIVE_SPEED,18,18,5);
             /*Crater/BackSpace means turn left 120 degrees*/
@@ -275,6 +271,6 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
-        encoderHook(0.5, 11,5);  //Hook going up is POSITIVE distance
+        encoderHook(.75, 30,10);  //Hook going up is POSITIVE distance
     }
 }

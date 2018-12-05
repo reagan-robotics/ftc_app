@@ -90,7 +90,7 @@ public class AutonomousMode_bigsign extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        roverNav = new RoverNav(hardwareMap);
+       // roverNav = new RoverNav(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //

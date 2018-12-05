@@ -29,26 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 
 /**
@@ -113,6 +96,7 @@ public class RoverNav {
 
     // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
     // Valid choices are:  BACK or FRONT
+    /*
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
 
     private OpenGLMatrix lastLocation = null;
@@ -129,26 +113,25 @@ public class RoverNav {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    VuforiaLocalizer vuforia;
+    //VuforiaLocalizer vuforia;
 
-    public RoverNav(HardwareMap hardwareMap) {
-        this.hardwareMap = hardwareMap;
+    //public RoverNav(HardwareMap hardwareMap) {
+        //this.hardwareMap = hardwareMap;
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
          * If no camera monitor is desired, use the parameterless constructor instead (commented out below).
          */
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
+        //int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CAMERA_CHOICE;
+        //parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        //parameters.cameraDirection = CAMERA_CHOICE;
 
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
+        //vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        /*
         // Load the data sets that for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
         targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
@@ -162,8 +145,8 @@ public class RoverNav {
         backSpace.setName("Back-Space");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
-        allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(targetsRoverRuckus);
+        //allTrackables = new ArrayList<VuforiaTrackable>();
+        //allTrackables.addAll(targetsRoverRuckus);
 
         /**
          * In order for localization to work, we need to tell the system where each target is on the field, and
@@ -190,10 +173,10 @@ public class RoverNav {
          * - First we rotate it 90 around the field's X axis to flip it upright.
          * - Then, we translate it along the Y axis to the blue perimeter wall.
          */
-        OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
-                .translation(0, mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
-        blueRover.setLocation(blueRoverLocationOnField);
+        //OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
+          //      .translation(0, mmFTCFieldWidth, mmTargetHeight)
+            //    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
+        //blueRover.setLocation(blueRoverLocationOnField);
 
         /**
          * To place the RedFootprint target in the middle of the red perimeter wall:
@@ -202,10 +185,10 @@ public class RoverNav {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the negative Y axis to the red perimeter wall.
          */
-        OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
-                .translation(0, -mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
-        redFootprint.setLocation(redFootprintLocationOnField);
+        //OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
+          //      .translation(0, -mmFTCFieldWidth, mmTargetHeight)
+            //    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
+        //redFootprint.setLocation(redFootprintLocationOnField);
 
         /**
          * To place the FrontCraters target in the middle of the front perimeter wall:
@@ -214,10 +197,10 @@ public class RoverNav {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the negative X axis to the front perimeter wall.
          */
-        OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
-                .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90));
-        frontCraters.setLocation(frontCratersLocationOnField);
+        //OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
+          //      .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
+            //    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90));
+        //frontCraters.setLocation(frontCratersLocationOnField);
 
         /**
          * To place the BackSpace target in the middle of the back perimeter wall:
@@ -226,10 +209,10 @@ public class RoverNav {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the X axis to the back perimeter wall.
          */
-        OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
-                .translation(mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
-        backSpace.setLocation(backSpaceLocationOnField);
+        //OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
+         //       .translation(mmFTCFieldWidth, 0, mmTargetHeight)
+           //     .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+        //backSpace.setLocation(backSpaceLocationOnField);
 
         /**
          * Create a transformation matrix describing where the phone is on the robot.
@@ -254,26 +237,25 @@ public class RoverNav {
          * In this example, it is centered (left to right), but 110 mm forward of the middle of the robot, and 200 mm above ground level.
          */
 
-        final int CAMERA_FORWARD_DISPLACEMENT = 110;   // eg: Camera is 110 mm in front of robot center
-        final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
-        final int CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        //final int CAMERA_FORWARD_DISPLACEMENT = 110;   // eg: Camera is 110 mm in front of robot center
+        //final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
+        //final int CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
-        OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
+        //OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
+                //.translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                //.multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
+                        //CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
 
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
-        }
+        //for (VuforiaTrackable trackable : allTrackables) {
+            //((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
     }
 
     /** Start tracking the data sets we care about. */
-    public void activate() {
-        targetsRoverRuckus.activate();
-    }
+    //public void activate() {
+        //targetsRoverRuckus.activate();
 
+    /*
     public boolean updateCurrentLocation() {
             // check all the trackable target to see which one (if any) is visible.
             targetVisible = false;
@@ -318,5 +300,6 @@ public class RoverNav {
     //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
     public Orientation getCurrentRotation() {
         return currentRotation;
-    }
+    }/*
 }
+*/

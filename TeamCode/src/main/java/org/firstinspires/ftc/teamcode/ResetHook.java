@@ -34,8 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -91,7 +89,7 @@ public class ResetHook extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        roverNav = new RoverNav(hardwareMap);
+        //roverNav = new RoverNav(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -258,8 +256,8 @@ public class ResetHook extends LinearOpMode {
         encoderDrive(DRIVE_SPEED,18,18,5);
 
         /*detect picture*/
-        VuforiaTrackable location = roverNav.getCurrentTrackable();
-        if(location.getName()=="Front-Craters" || location.getName()=="Back-Space"){
+       // VuforiaTrackable location = roverNav.getCurrentTrackable();
+        if(true){
             /* move forward 18 inches*/
             encoderDrive(DRIVE_SPEED,18,18,5);
             /*Crater/BackSpace means turn left 120 degrees*/
