@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+<<<<<<< HEAD
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.ArrayList;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -37,6 +38,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
+=======
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+>>>>>>> Tuesday Night
 
 
 /**
@@ -120,8 +126,8 @@ public class RoverNav {
      */
     //VuforiaLocalizer vuforia;
 
-    public RoverNav(HardwareMap hardwareMap) {
-        this.hardwareMap = hardwareMap;
+    //public RoverNav(HardwareMap hardwareMap) {
+        //this.hardwareMap = hardwareMap;
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -131,8 +137,8 @@ public class RoverNav {
         //VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CAMERA_CHOICE;
+        //parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        //parameters.cameraDirection = CAMERA_CHOICE;
 
         //  Instantiate the Vuforia engine
         //vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -150,8 +156,8 @@ public class RoverNav {
         backSpace.setName("Back-Space");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
-        allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(targetsRoverRuckus);
+        //allTrackables = new ArrayList<VuforiaTrackable>();
+        //allTrackables.addAll(targetsRoverRuckus);
 
         /**
          * In order for localization to work, we need to tell the system where each target is on the field, and
@@ -202,10 +208,10 @@ public class RoverNav {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the negative X axis to the front perimeter wall.
          */
-        OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
-                .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90));
-        frontCraters.setLocation(frontCratersLocationOnField);
+        //OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
+          //      .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
+            //    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90));
+        //frontCraters.setLocation(frontCratersLocationOnField);
 
         /**
          * To place the BackSpace target in the middle of the back perimeter wall:
@@ -242,9 +248,9 @@ public class RoverNav {
          * In this example, it is centered (left to right), but 110 mm forward of the middle of the robot, and 200 mm above ground level.
          */
 
-        final int CAMERA_FORWARD_DISPLACEMENT = 110;   // eg: Camera is 110 mm in front of robot center
-        final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
-        final int CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        //final int CAMERA_FORWARD_DISPLACEMENT = 110;   // eg: Camera is 110 mm in front of robot center
+        //final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
+        //final int CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
         //OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
                 //.translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -252,16 +258,15 @@ public class RoverNav {
                         //CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
 
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
-        }
+        //for (VuforiaTrackable trackable : allTrackables) {
+            //((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
     }
 
     /** Start tracking the data sets we care about. */
-    public void activate() {
-        targetsRoverRuckus.activate();
-    }
+    //public void activate() {
+        //targetsRoverRuckus.activate();
 
+    /*
     public boolean updateCurrentLocation() {
             // check all the trackable target to see which one (if any) is visible.
             targetVisible = false;
