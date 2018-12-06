@@ -61,7 +61,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous", group="Pushbot")
+@Autonomous(name="drive", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -143,31 +143,7 @@ public class AutonomousMode extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
-        roverNav.activate();
-
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-
-        // lower the robot
-
-        //lowerRobot();
-        //spinRobot(180);
-        sleep(1000);
-        encoderDrive(DRIVE_SPEED, 120, 120, 5);
-        lowerRobot();
-
-
-
-        //encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
-
-
-        sleep(1000);     // pause for servos to move
-
-        sleep(1000);     // pause for servos to move
-;
+        engage();
         telemetry.update();
     }
 
