@@ -271,6 +271,6 @@ public class AutonomousMode_LowerSpin extends LinearOpMode {
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
-        encoderHook(.75, 30,10);  //Hook going up is POSITIVE distance
+        encoderHook(.75, 22,10);  //Hook going up is POSITIVE distance
     }
 }

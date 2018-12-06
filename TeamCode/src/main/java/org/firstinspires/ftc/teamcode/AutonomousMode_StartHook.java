@@ -115,7 +115,15 @@ public class AutonomousMode_StartHook extends LinearOpMode {
 
         // lower the robot
 
-        encoderHook(.75,12,5);
+        resetHook();
+        encoderHook(.75,17,5);
+        //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
+            //encoderHook(.75,20,5);
+            //stop();
+        //}else{
+            //resetHook();
+        //}
+
         //parkRobot();
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
@@ -265,9 +273,18 @@ public class AutonomousMode_StartHook extends LinearOpMode {
         /*move forward 24 inches */
         encoderDrive(DRIVE_SPEED,36,36,5);
     }
+    private void resetHook() {
+        robot.liftoffHook.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.liftoffHook.setPower(-25);
+        while (!robot.hookTouch.isPressed()) {
+
+        }
+        robot.liftoffHook.setPower(0);
+        robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
-        encoderHook(.75, 10,10);  //Hook going up is POSITIVE distance
+        encoderHook(.75, 20,10);  //Hook going up is POSITIVE distance
     }
 }

@@ -61,7 +61,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous", group="Pushbot")
+@Autonomous(name="drive", group="Pushbot")
 public class AutonomousMode extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -75,11 +75,11 @@ public class AutonomousMode extends LinearOpMode {
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * Math.PI);
     static final double     HOOK_PER_MOTOR_REV      = 420;
-    static final double     AXLE_DIAMETER_INCHES    = 0.235;
+    static final double     AXLE_DIAMETER_INCHES    = 0.35;
     static final double     HOOK_COUNTS_PER_INCH    =(HOOK_PER_MOTOR_REV * 1/
-                                                      AXLE_DIAMETER_INCHES * Math.PI);
-    static final double     DRIVE_SPEED             = 0.4;
-    static final double     TURN_SPEED              = 0.5;
+            (AXLE_DIAMETER_INCHES * Math.PI));
+    static final double     DRIVE_SPEED             = 0.45;
+    static final double     TURN_SPEED              = 0.35;
 
     @Override
     public void runOpMode() {
@@ -109,7 +109,7 @@ public class AutonomousMode extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        //encoderDrive(DRIVE_SPEED, 48, 48, 10);
+        engage();
         telemetry.update();
     }
 
@@ -241,26 +241,36 @@ public class AutonomousMode extends LinearOpMode {
         robot.tokenDrop.setPosition(0.5);
     }
 
+    private void resetHook() {
+        robot.liftoffHook.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.liftoffHook.setPower(-25);
+        while (!robot.hookTouch.isPressed()) {
+
+        }
+        robot.liftoffHook.setPower(0);
+        robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     private void engage() {
          /*lowerRobot();*/
-        spinRobot(-180);
-        driveRobot(23);
+        lowerRobot();
+        spinRobot(-185);
+        driveRobot(21);
         /* move forward 18 inches*/
-        spinRobot(-105);
-        //encoderDrive(DRIVE_SPEED,18,18,5);
-       // spinRobot(30);
-        driveRobot(62.5);
-        spinRobot(-47);
-        driveRobot(30);
         spinRobot(-90);
+        driveRobot(49);
+        spinRobot(-65);
+        driveRobot(49);
+        spinRobot(-35);
         dropToken();
-        spinRobot(-100);
-        driveRobot(75);
+        spinRobot(35);
+        spinRobot(-192);
+        driveRobot(70);
+        resetHook();
 
     }
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
-        encoderHook(0.5, 11,5);  //Hook going up is POSITIVE distance
+        encoderHook(0.75, 23,10);  //Hook going up is POSITIVE distance
     }
 }
