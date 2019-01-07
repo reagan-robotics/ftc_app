@@ -63,6 +63,7 @@ public class Spaceboy
     public static double ARM_UP_INCHES = 5;
     public static double ARM_DOWN_INCHES = -5;
     public TouchSensor hookTouch = null;
+    public TouchSensor autoSelect = null;
 
 
     /* local OpMode members. */
@@ -87,7 +88,7 @@ public class Spaceboy
         motorLeft.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         motorRight.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         hookTouch = hwMap.get(TouchSensor.class, "hookTouch");
-
+        autoSelect = hwMap.get(TouchSensor.class,"Rudolph");
 
         // Set all motors to zero power
         motorLeft.setPower(0);

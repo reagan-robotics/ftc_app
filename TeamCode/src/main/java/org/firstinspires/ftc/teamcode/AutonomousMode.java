@@ -144,6 +144,8 @@ public class AutonomousMode extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         engage();
+
+        resetHook();
         telemetry.update();
     }
 
@@ -214,6 +216,7 @@ public class AutonomousMode extends LinearOpMode {
      *  2) Move runs out of time
      *  3) Driver stops the opmode running.
      */
+
     public void encoderDrive(double speed,
                              double leftInches, double rightInches,
                              double timeoutS) {
@@ -240,7 +243,9 @@ public class AutonomousMode extends LinearOpMode {
 
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
-                   (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
+                    (robot.liftoffHook.isBusy())){
+                   //(robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
+
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
@@ -275,7 +280,8 @@ public class AutonomousMode extends LinearOpMode {
         robot.tokenDrop.setPosition(0.5);
     }
 
-    private void resetHook() {
+    private void resetHook()
+    {
         robot.liftoffHook.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.liftoffHook.setPower(-25);
         while (!robot.hookTouch.isPressed()) {
@@ -285,26 +291,31 @@ public class AutonomousMode extends LinearOpMode {
         robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     private void engage() {
-         /*lowerRobot();*/
         lowerRobot();
         spinRobot(-185);
         driveRobot(21);
-        /* move forward 18 inches*/
-        spinRobot(-90);
-        driveRobot(49);
-        spinRobot(-65);
-        driveRobot(49);
-        spinRobot(-35);
-        dropToken();
-        spinRobot(35);
-        spinRobot(-192);
-        driveRobot(70);
-        resetHook();
 
+        if(robot.autoSelect.isPressed()) { // NW/SE
+            spinRobot(-90);
+            driveRobot(51);
+            spinRobot(-62);
+            driveRobot(49);
+        }else{ // NE/SW
+            spinRobot(90);
+            driveRobot(40);
+            spinRobot(-130);
+            driveRobot(50);
+        }
+
+        spinRobot(-45);
+        dropToken();
+        spinRobot(45);
+        spinRobot(-191);
+        driveRobot(71);
+            //resetHook();
     }
 
     public void lowerRobot() {
-        /*encoderHook(0.5, -1,5);*/
-        encoderHook(0.75, 23,10);  //Hook going up is POSITIVE distance
+        encoderHook(0.75, 35,10);  //Hook going up is POSITIVE distance
     }
 }

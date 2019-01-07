@@ -38,48 +38,47 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
  * The code is structured as a LinearOpMode
- * <p>
+ *
  * The code REQUIRES that you DO have encoders on the wheels,
- * otherwise you would use: PushbotAutoDriveByTime;
- * <p>
- * This code ALSO requires that the drive Motors have been configured such that a positive
- * power command moves them forwards, and causes the encoders to count UP.
- * <p>
- * The desired path in this example is:
- * - Drive forward for 48 inches
- * - Spin right for 12 Inches
- * - Drive Backwards for 24 inches
- * - Stop and close the claw.
- * <p>
- * The code is written using a method called: encoderDrive(speed, leftInches, rightInches, timeoutS)
- * that performs the actual movement.
- * This methods assumes that each movement is relative to the last stopping place.
- * There are other ways to perform encoder based moves, but this method is probably the simplest.
- * This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
- * <p>
+ *   otherwise you would use: PushbotAutoDriveByTime;
+ *
+ *  This code ALSO requires that the drive Motors have been configured such that a positive
+ *  power command moves them forwards, and causes the encoders to count UP.
+ *
+ *   The desired path in this example is:
+ *   - Drive forward for 48 inches
+ *   - Spin right for 12 Inches
+ *   - Drive Backwards for 24 inches
+ *   - Stop and close the claw.
+ *
+ *  The code is written using a method called: encoderDrive(speed, leftInches, rightInches, timeoutS)
+ *  that performs the actual movement.
+ *  This methods assumes that each movement is relative to the last stopping place.
+ *  There are other ways to perform encoder based moves, but this method is probably the simplest.
+ *  This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
+ *
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "Pushbot: ResetHook", group = "Pushbot")
-public class ResetHook extends LinearOpMode {
+@Autonomous(name= "Start Hook doesn't work")
+public class HOOK_START extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private Spaceboy robot = new Spaceboy();   // Use a Pushbot's hardware
+    private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
     private RoverNav roverNav = null;
-    private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: TETRIX Motor Encoder
-    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
-    static final double WHEEL_DIAMETER_INCHES = 4.5;     // For figuring circumference
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * Math.PI);
-    static final double HOOK_PER_MOTOR_REV = 420;
-    static final double AXLE_DIAMETER_INCHES = 0.235;
-    static final double HOOK_COUNTS_PER_INCH = (HOOK_PER_MOTOR_REV * 1 /
-            AXLE_DIAMETER_INCHES * Math.PI);
-    static final double DRIVE_SPEED = 0.4;
-    static final double TURN_SPEED = 0.5;
+    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4.5 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+                                                      (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final double     HOOK_PER_MOTOR_REV      = 420;
+    static final double     AXLE_DIAMETER_INCHES    = 0.35;
+    static final double     HOOK_COUNTS_PER_INCH    =(HOOK_PER_MOTOR_REV * 1/ (AXLE_DIAMETER_INCHES * Math.PI));
+    static final double     DRIVE_SPEED             = 0.4;
+    static final double     TURN_SPEED              = 0.5;
 
     @Override
     public void runOpMode() {
@@ -102,10 +101,13 @@ public class ResetHook extends LinearOpMode {
         robot.motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0", "Starting at %7d :%7d",
-                robot.motorLeft.getCurrentPosition(),
-                robot.motorRight.getCurrentPosition());
+        telemetry.addData("Path0",  "Starting at %7d :%7d",
+                          robot.motorLeft.getCurrentPosition(),
+                          robot.motorRight.getCurrentPosition(),
+                          robot.liftoffHook.getCurrentPosition());
+
         telemetry.update();
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -114,56 +116,45 @@ public class ResetHook extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
         // lower the robot
+
         resetHook();
+        encoderHook(.75,0,3);
+        //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
+            //encoderHook(.75,20,5);
+            //stop();
+        //}else{
+            //resetHook();
+        //}
 
-        /*lowerRobot();
-
-        spinRobot(180);*/
-        /*parkRobot();*/
+        //parkRobot();
         //encoderDrive(DRIVE_SPEED, 48, 48, 10);
         telemetry.update();
     }
 
     public void encoderHook(double speed,
-                            double inches,
-                            double timeoutS) {
+                             double inches,
+                             double timeoutS) {
         int newTarget;
-
-
-        // Ensure that the opmode is still active
         if (opModeIsActive()) {
-
             // Determine new target position, and pass to motor controller
-            newTarget = robot.liftoffHook.getCurrentPosition() + (int) (inches * HOOK_COUNTS_PER_INCH);
+            newTarget = robot.liftoffHook.getCurrentPosition() + (int)(inches * HOOK_COUNTS_PER_INCH);
             robot.liftoffHook.setTargetPosition(newTarget);
-
 
             // Turn On RUN_TO_POSITION
             robot.liftoffHook.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
-            // reset the timeout time and start motion.
             runtime.reset();
             robot.liftoffHook.setPower(Math.abs(speed));
 
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.liftoffHook.isBusy())) {
+                    (robot.liftoffHook.isBusy())){
 
                 // Display it for the driver.
-                telemetry.addData("Path", "To %7d : current: %7d", newTarget,
-                        robot.liftoffHook.getCurrentPosition());
+                telemetry.addData("Path",  "To %7d : current: %7d", newTarget, robot.liftoffHook.getCurrentPosition());
                 telemetry.update();
             }
 
-            // Stop all motion;
             robot.liftoffHook.setPower(0);
 
 
@@ -174,18 +165,16 @@ public class ResetHook extends LinearOpMode {
             //  sleep(250);   // optional pause after each move
         }
     }
-
-    private void spinRobot(double degrees) {
+    private void spinRobot (double degrees){
         //calculate circumference
 
         double circumference = 15.0 * Math.PI;
 
         //calculate distance
-        double distance = degrees / 360.0 * circumference;
+        double distance = degrees/360.0 * circumference;
 
-        encoderDrive(TURN_SPEED, distance, -distance, 5);
+        encoderDrive (TURN_SPEED, distance, -distance, 5);
     }
-
     /*
      *  Method to perfmorm a relative move, based on encoder counts.
      *  Encoders are not reset as the move is based on the current position.
@@ -204,7 +193,7 @@ public class ResetHook extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = (robot.motorLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
+            newLeftTarget = (robot.motorLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH));
             newRightTarget = (robot.motorRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
             robot.motorLeft.setTargetPosition(newLeftTarget);
             robot.motorRight.setTargetPosition(newRightTarget);
@@ -219,17 +208,16 @@ public class ResetHook extends LinearOpMode {
             robot.motorRight.setPower(Math.abs(speed));
 
             while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
+                   (runtime.seconds() < timeoutS) &&
+                   (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Path2", "Running at %7d :%7d",
-                        robot.motorLeft.getCurrentPosition(),
-                        robot.motorRight.getCurrentPosition());
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                                            robot.motorLeft.getCurrentPosition(),
+                                            robot.motorRight.getCurrentPosition());
                 telemetry.update();
             }
-
             // Stop all motion;
             robot.motorLeft.setPower(0);
             robot.motorRight.setPower(0);
@@ -242,46 +230,6 @@ public class ResetHook extends LinearOpMode {
         }
     }
 
-    private void parkRobot() {
-        /*
-        lower*/
-        /*lowerRobot();*/
-        lowerRobot();
-        /*spin 180 degrees*/
-        /*spinRobot(180);*/
-        encoderDrive(DRIVE_SPEED, 0, 5, 5);
-        /*move backwards 20 inches*/
-        encoderDrive(DRIVE_SPEED, -20, -20, 5);
-        /*turn left 100 degrees*/
-        spinRobot(-100);
-        /* move forward 18 inches*/
-        encoderDrive(DRIVE_SPEED, 18, 18, 5);
-
-        /*detect picture*/
-        // VuforiaTrackable location = roverNav.getCurrentTrackable();
-        if (true) {
-            /* move forward 18 inches*/
-            encoderDrive(DRIVE_SPEED, 18, 18, 5);
-            /*Crater/BackSpace means turn left 120 degrees*/
-            spinRobot(-120);
-        } else {
-            /* move forward 18 inches*/
-            encoderDrive(DRIVE_SPEED, 18, 18, 5);
-            /*Foot/Rover means turn right 30 degrees*/
-            spinRobot(30);
-        }
-
-        /*determine which direction to turn depending on picture seen*/
-
-        /*move forward 24 inches */
-        encoderDrive(DRIVE_SPEED, 36, 36, 5);
-    }
-
-    public void lowerRobot() {
-        encoderHook(0.5, -1, 5);
-        /*encoderHook(0.5, 8,5);*/
-    }
-
     private void resetHook() {
         robot.liftoffHook.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.liftoffHook.setPower(-25);
@@ -289,5 +237,11 @@ public class ResetHook extends LinearOpMode {
 
         }
         robot.liftoffHook.setPower(0);
+        robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void lowerRobot() {
+        /*encoderHook(0.5, -1,5);*/
+        encoderHook(.75, 10,10);  //Hook going up is POSITIVE distance
     }
 }

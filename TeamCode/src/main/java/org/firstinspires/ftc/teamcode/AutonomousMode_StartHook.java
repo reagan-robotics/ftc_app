@@ -103,7 +103,9 @@ public class AutonomousMode_StartHook extends LinearOpMode {
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0",  "Starting at %7d :%7d",
                           robot.motorLeft.getCurrentPosition(),
-                          robot.motorRight.getCurrentPosition());
+                          robot.motorRight.getCurrentPosition(),
+                          robot.liftoffHook.getCurrentPosition());
+
         telemetry.update();
 
 
@@ -116,7 +118,7 @@ public class AutonomousMode_StartHook extends LinearOpMode {
         // lower the robot
 
         resetHook();
-        encoderHook(.75,17,5);
+        encoderHook(.75,17,10);
         //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
             //encoderHook(.75,20,5);
             //stop();
@@ -159,8 +161,7 @@ public class AutonomousMode_StartHook extends LinearOpMode {
                     (robot.liftoffHook.isBusy())){
 
                 // Display it for the driver.
-                telemetry.addData("Path",  "To %7d : current: %7d", newTarget,
-                        robot.liftoffHook.getCurrentPosition());
+                telemetry.addData("Path",  "To %7d : current: %7d", newTarget, robot.liftoffHook.getCurrentPosition());
                 telemetry.update();
             }
             // Stop all motion;
@@ -285,6 +286,6 @@ public class AutonomousMode_StartHook extends LinearOpMode {
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
-        encoderHook(.75, 20,10);  //Hook going up is POSITIVE distance
+        encoderHook(.75, 16,10);  //Hook going up is POSITIVE distance
     }
 }
