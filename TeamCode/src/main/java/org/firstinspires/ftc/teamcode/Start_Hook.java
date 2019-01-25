@@ -61,8 +61,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name= "Start Hook doesn't work")
-public class HOOK_START extends LinearOpMode {
+@Autonomous(name="Start Hook", group="Pushbot")
+public class Start_Hook extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
@@ -118,7 +118,7 @@ public class HOOK_START extends LinearOpMode {
         // lower the robot
 
         resetHook();
-        encoderHook(.75,0,3);
+        encoderHook(.75,16,10);
         //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
             //encoderHook(.75,20,5);
             //stop();
@@ -135,6 +135,7 @@ public class HOOK_START extends LinearOpMode {
                              double inches,
                              double timeoutS) {
         int newTarget;
+        // Ensure that the opmode is still active
         if (opModeIsActive()) {
             // Determine new target position, and pass to motor controller
             newTarget = robot.liftoffHook.getCurrentPosition() + (int)(inches * HOOK_COUNTS_PER_INCH);
@@ -143,9 +144,18 @@ public class HOOK_START extends LinearOpMode {
             // Turn On RUN_TO_POSITION
             robot.liftoffHook.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
+            // reset the timeout time and start motion.
             runtime.reset();
             robot.liftoffHook.setPower(Math.abs(speed));
 
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (robot.liftoffHook.isBusy())){
@@ -154,7 +164,7 @@ public class HOOK_START extends LinearOpMode {
                 telemetry.addData("Path",  "To %7d : current: %7d", newTarget, robot.liftoffHook.getCurrentPosition());
                 telemetry.update();
             }
-
+            // Stop all motion;
             robot.liftoffHook.setPower(0);
 
 
@@ -230,6 +240,40 @@ public class HOOK_START extends LinearOpMode {
         }
     }
 
+    private void parkRobot() {
+        /*
+        lower*/
+        /*lowerRobot();*/
+        lowerRobot();
+        /*spin 180 degrees*/
+        /*spinRobot(180);*/
+        encoderDrive(DRIVE_SPEED,0, 10,5);
+        /*move backwards 20 inches*/
+        encoderDrive(DRIVE_SPEED,-20,-20,5);
+        /*turn left 100 degrees*/
+        spinRobot(-100);
+        /* move forward 18 inches*/
+        encoderDrive(DRIVE_SPEED,18,18,5);
+
+        /*detect picture*/
+        //VuforiaTrackable location = roverNav.getCurrentTrackable();
+
+        if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
+            /* move forward 18 inches*/
+            encoderDrive(DRIVE_SPEED,18,18,5);
+            /*Crater/BackSpace means turn left 120 degrees*/
+            spinRobot(-120);
+        }else{
+            /* move forward 18 inches*/
+            encoderDrive(DRIVE_SPEED,18,18,5);
+            /*Foot/Rover means turn right 30 degrees*/
+            spinRobot(30);
+        }
+        /*determine which direction to turn depending on picture seen*/
+
+        /*move forward 24 inches */
+        encoderDrive(DRIVE_SPEED,36,36,5);
+    }
     private void resetHook() {
         robot.liftoffHook.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.liftoffHook.setPower(-25);
@@ -242,6 +286,6 @@ public class HOOK_START extends LinearOpMode {
 
     public void lowerRobot() {
         /*encoderHook(0.5, -1,5);*/
-        encoderHook(.75, 10,10);  //Hook going up is POSITIVE distance
+        encoderHook(.75, 3,10);  //Hook going up is POSITIVE distance
     }
 }

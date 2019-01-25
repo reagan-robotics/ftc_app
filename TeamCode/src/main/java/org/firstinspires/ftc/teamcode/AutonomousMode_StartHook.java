@@ -118,7 +118,7 @@ public class AutonomousMode_StartHook extends LinearOpMode {
         // lower the robot
 
         resetHook();
-        encoderHook(.75,17,10);
+        encoderHook(.75,20,10);
         //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
             //encoderHook(.75,20,5);
             //stop();

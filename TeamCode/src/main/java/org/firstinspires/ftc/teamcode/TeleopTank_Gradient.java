@@ -92,8 +92,8 @@ public class TeleopTank_Gradient extends OpMode{
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
 
-        robot.motorLeft.setPower(Math.signum(left)*((Math.pow(Math.abs(left),2))));
-        robot.motorRight.setPower(Math.signum(right)*(Math.pow(Math.abs(right),2)));
+        robot.motorLeft.setPower(Math.signum(left)*((Math.pow(Math.abs(left),1))));
+        robot.motorRight.setPower(Math.signum(right)*(Math.pow(Math.abs(right),1)));
 
         //if (gamepad1.x)
           //  robot.liftoffHook.setPower(robot.ARM_UP_POWER);

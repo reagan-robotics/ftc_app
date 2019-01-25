@@ -29,7 +29,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -64,6 +67,9 @@ public class Spaceboy
     public static double ARM_DOWN_INCHES = -5;
     public TouchSensor hookTouch = null;
     public TouchSensor autoSelect = null;
+    public Rev2mDistanceSensor distanceSensor = null;
+    public BNO055IMU imu = null;
+
 
 
     /* local OpMode members. */
@@ -82,6 +88,7 @@ public class Spaceboy
 
         // Define and Initialize Motors
         motorLeft  = hwMap.get(DcMotor.class, "motor_left");
+        distanceSensor = (Rev2mDistanceSensor)hwMap.get(DistanceSensor.class, "sensor_range");
         motorRight = hwMap.get(DcMotor.class, "motor_right");
         liftoffHook    = hwMap.get(DcMotor.class, "liftoff_hook");
         tokenDrop   = hwMap.get(Servo.class, "token_drop");
@@ -89,6 +96,7 @@ public class Spaceboy
         motorRight.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         hookTouch = hwMap.get(TouchSensor.class, "hookTouch");
         autoSelect = hwMap.get(TouchSensor.class,"Rudolph");
+        imu = hwMap.get(BNO055IMU.class, "imu");
 
         // Set all motors to zero power
         motorLeft.setPower(0);
