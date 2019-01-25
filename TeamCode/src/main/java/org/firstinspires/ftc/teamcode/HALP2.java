@@ -81,10 +81,10 @@ public class HALP2 extends LinearOpMode {
             driveRobot(-93);
         } else { // NE/SW //Up to the depot
             //spinRobot(165);
-            driveRobot(23.5);
-            spinRobot(85);
-            driveRobot(50);
-            spinRobot(-135);
+            driveRobot(17.5);
+            spinRobot(80);
+            driveRobot(40);
+            spinRobot(-115);
             //driveRobot(10.5);
             //spinRobot(-90);
             driveRobot(50);
