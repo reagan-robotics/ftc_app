@@ -66,7 +66,7 @@ public class Start_Hook extends LinearOpMode {
 
     /* Declare OpMode members. */
     private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
-    private RoverNav roverNav = null;
+
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
@@ -88,7 +88,7 @@ public class Start_Hook extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-        //roverNav = new RoverNav(hardwareMap);
+
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
@@ -118,7 +118,7 @@ public class Start_Hook extends LinearOpMode {
         // lower the robot
 
         resetHook();
-        encoderHook(.75,16,10);
+        encoderHook(5,16,10);
         //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
             //encoderHook(.75,20,5);
             //stop();

@@ -55,6 +55,7 @@ public class TeleopTank_Gradient extends OpMode{
     /*
      * Code to run ONCE when the driver hits INIT
      */
+    double W=1;
     @Override
     public void init() {
         /* Initialize the hardware variables.
@@ -88,9 +89,16 @@ public class TeleopTank_Gradient extends OpMode{
         double left;
         double right;
 
+        if(gamepad1.x){
+            W=.2;
+        }
+         if(gamepad1.b){
+            W=1;
+        }
+
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        left = W*-gamepad1.left_stick_y;
+        right = W*-gamepad1.right_stick_y;
 
         robot.motorLeft.setPower(Math.signum(left)*((Math.pow(Math.abs(left),1))));
         robot.motorRight.setPower(Math.signum(right)*(Math.pow(Math.abs(right),1)));

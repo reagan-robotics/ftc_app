@@ -11,39 +11,39 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="HALP", group="Pushbot")
-public class HALP extends LinearOpMode {
+@Autonomous(name="WHY", group="Pushbot")
+public class WHY extends LinearOpMode {
 
-    private Spaceboy robot   = new Spaceboy();   // Use a Pushbot's hardware
-    private ElapsedTime     runtime = new ElapsedTime();
+    private Spaceboy robot = new Spaceboy();   // Use a Pushbot's hardware
+
+    private ElapsedTime runtime = new ElapsedTime();
     private Orientation lastAngles = new Orientation();
     private double globalAngle, power = .30, correction;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.5 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV = 1120 / 2;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 4.5;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * Math.PI);
-    static final double     HOOK_PER_MOTOR_REV      = 420;
-    static final double     AXLE_DIAMETER_INCHES    = 0.35;
-    static final double     HOOK_COUNTS_PER_INCH    =(HOOK_PER_MOTOR_REV * 1/
+    static final double HOOK_PER_MOTOR_REV = 420;
+    static final double AXLE_DIAMETER_INCHES = 0.35;
+    static final double HOOK_COUNTS_PER_INCH = (HOOK_PER_MOTOR_REV * 1 /
             (AXLE_DIAMETER_INCHES * Math.PI));
-    static final double     DRIVE_SPEED             = 0.35;
-    static final double     TURN_SPEED              = 0.2;
+    static final double DRIVE_SPEED = 0.35;
+    static final double TURN_SPEED = 0.2;
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -61,25 +61,45 @@ public class HALP extends LinearOpMode {
 
         waitForStart();
 
+        encoderHook(30, 35, 10);  //Hook going up is POSITIVE distance
+
         test();
 
         //resetHook();
         telemetry.update();
     }
 
-    private void test(){
-        driveRobot(240);
-        spinRobot(-90);
-        driveRobot(12);
-        spinRobot(-90);
-        driveRobot(240);
+    private void test() {
+        //lowerRobot();
+        if (robot.autoSelect.isPressed()) { // NW/SE //Down into the crater
+            //spinRobot(145);
+            driveRobot(13.5); //16.5
+            spinRobot(85);  //90
+            driveRobot(50);
+            spinRobot(44.8);
+            driveRobot(25.5);
+            dropToken();
+            driveRobot(-93);
+        } else { // NE/SW //Up to the depot
+            //spinRobot(165);
+            driveRobot(17.5);
+            //spinRobot(80);
+            //driveRobot(40);
+            //spinRobot(-115);
+            //driveRobot(10.5);
+            //spinRobot(-90);
+            //driveRobot(50);
+            dropToken();
+            //driveRobot(-90);
+        }
+
+
     }
 
     /**
      * Resets the cumulative angle tracking to zero.
      */
-    private void resetAngle()
-    {
+    private void resetAngle() {
         lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
@@ -87,10 +107,10 @@ public class HALP extends LinearOpMode {
 
     /**
      * Get current cumulative angle rotation from last reset.
+     *
      * @return Angle in degrees. + = left, - = right.
      */
-    private double getAngle()
-    {
+    private double getAngle() {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
         // We have to process the angle because the imu works in euler angles so the Z axis is
         // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
@@ -114,10 +134,10 @@ public class HALP extends LinearOpMode {
 
     /**
      * See if we are moving in a straight line and if not return a power correction value.
+     *
      * @return Power adjustment, + is adjust left - is adjust right.
      */
-    private double checkDirection()
-    {
+    private double checkDirection() {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
@@ -137,11 +157,11 @@ public class HALP extends LinearOpMode {
 
     /**
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
+     *
      * @param degrees Degrees to turn, - is left + is right
      */
-    private void rotate(double degrees, double power)
-    {
-        double  leftPower, rightPower;
+    private void rotate(double degrees, double power) {
+        double leftPower, rightPower;
 
         // restart imu movement tracking.
         resetAngle();
@@ -149,25 +169,20 @@ public class HALP extends LinearOpMode {
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         // clockwise (right).
 
-        if (degrees < 0)
-        {   // turn right.
+        if (degrees < 0) {   // turn right.
             leftPower = power;
             rightPower = -power;
-        }
-        else if (degrees > 0)
-        {   // turn left.
+        } else if (degrees > 0) {   // turn left.
             leftPower = -power;
             rightPower = power;
-        }
-        else return;
+        } else return;
 
         // set power to rotate.
         robot.motorLeft.setPower(leftPower);
         robot.motorRight.setPower(rightPower);
 
         // rotate until turn is completed.
-        if (degrees < 0)
-        {
+        if (degrees < 0) {
             // On right turn we have to get off zero first.
             while (opModeIsActive() && getAngle() == 0) {
                 telemetry.addData("right turn off 0", getAngle());
@@ -178,8 +193,7 @@ public class HALP extends LinearOpMode {
                 telemetry.addData("right turn", getAngle());
                 telemetry.update();
             }
-        }
-        else {    // left turn.
+        } else {    // left turn.
             while (opModeIsActive() && getAngle() < degrees) {
                 telemetry.addData("left turn", getAngle());
                 telemetry.update();
@@ -191,8 +205,8 @@ public class HALP extends LinearOpMode {
         robot.motorLeft.setPower(0);
 
         double delta = Math.abs(getAngle() - degrees);
-        if(delta > 0.5) {
-            rotate((degrees - getAngle()), 0.02 );
+        if (delta > 0.5) {
+            rotate((degrees - getAngle()), 0.02);
         }
 
         // reset angle tracking on new heading.
@@ -205,7 +219,7 @@ public class HALP extends LinearOpMode {
         int newTarget;
 
         if (opModeIsActive()) {
-            newTarget = robot.liftoffHook.getCurrentPosition() + (int)(inches * HOOK_COUNTS_PER_INCH);
+            newTarget = robot.liftoffHook.getCurrentPosition() + (int) (inches * HOOK_COUNTS_PER_INCH);
             robot.liftoffHook.setTargetPosition(newTarget);
 
             robot.liftoffHook.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -215,7 +229,7 @@ public class HALP extends LinearOpMode {
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.liftoffHook.isBusy())){
+                    (robot.liftoffHook.isBusy())) {
 
             }
 
@@ -224,8 +238,8 @@ public class HALP extends LinearOpMode {
         }
     }
 
-    private void spinRobot (double degrees){
-        rotate((int)degrees, TURN_SPEED);
+    private void spinRobot(double degrees) {
+        rotate((int) degrees, TURN_SPEED);
         //double circumference = 15.0 * Math.PI;
         //double distance = degrees/360.0 * circumference;
 
@@ -240,7 +254,7 @@ public class HALP extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            newLeftTarget = (robot.motorLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH));
+            newLeftTarget = (robot.motorLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
             newRightTarget = (robot.motorRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
             robot.motorLeft.setTargetPosition(newLeftTarget);
             robot.motorRight.setTargetPosition(newRightTarget);
@@ -255,44 +269,50 @@ public class HALP extends LinearOpMode {
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (robot.motorLeft.isBusy() && robot.motorRight.isBusy())) {
-                if (robot.distanceSensor.getDistance(DistanceUnit.CM) > 5){
+                //if (robot.distanceSensor.getDistance(DistanceUnit.CM) > 5){
 
+                if (leftInches > 0 && rightInches > 0) {
                     correction = checkDirection();
-                    robot.motorLeft.setPower(Math.abs(speed)-correction);
+                    robot.motorLeft.setPower(Math.abs(speed) - correction);
                     robot.motorRight.setPower(Math.abs(speed));
-                }else {
-                    robot.motorLeft.setPower(0);
-                    robot.motorRight.setPower(0);
+                } else if (leftInches < 0 && rightInches < 0) {
+                    correction = checkDirection();
+                    robot.motorLeft.setPower(Math.abs(speed) + correction);
+                    robot.motorRight.setPower(Math.abs(speed));
                 }
-                telemetry.addData("current angle", getAngle());
-                telemetry.addData("correction", correction );
-                telemetry.addData("range", String.format("%.01f mm", robot.distanceSensor.getDistance(DistanceUnit.MM)));
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.motorLeft.getCurrentPosition(),
-                        robot.motorRight.getCurrentPosition());
-                telemetry.update();
+
+                //}else {
+                //robot.motorLeft.setPower(0);
+                //robot.motorRight.setPower(0);
             }
-            robot.motorLeft.setPower(0);
-            robot.motorRight.setPower(0);
-
-            robot.motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+            telemetry.addData("current angle", getAngle());
+            telemetry.addData("correction", correction);
+            //telemetry.addData("range", String.format("%.01f mm", robot.distanceSensor.getDistance(DistanceUnit.MM)));
+            telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+            telemetry.addData("Path2", "Running at %7d :%7d",
+                    robot.motorLeft.getCurrentPosition(),
+                    robot.motorRight.getCurrentPosition());
+            telemetry.update();
         }
+        robot.motorLeft.setPower(0);
+        robot.motorRight.setPower(0);
+
+        robot.motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
     private void driveRobot(double distance) {
-        encoderDrive(DRIVE_SPEED, distance, distance, 20);
+        encoderDrive(DRIVE_SPEED, distance, distance, 10);
     }
     private void dropToken() {
 
-        robot.tokenDrop.setPosition(0.5);
+        robot.tokenDrop.setPosition(1);
         try{
             Thread.sleep(2000);
         }catch(InterruptedException e){
             System.out.println("got interrupted!");
         }
-        robot.tokenDrop.setPosition(0.75);
+        robot.tokenDrop.setPosition(0.2);
     }
     private void resetHook()
     {
@@ -305,20 +325,20 @@ public class HALP extends LinearOpMode {
         robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     private void HI() {
-        lowerRobot();
+        //lowerRobot();
         //spinRobot(145);
         //driveRobot(-22.5);
 
         if (robot.autoSelect.isPressed()) { // NW/SE
-            spinRobot(150);
-            driveRobot(-25.5);
+            //spinRobot(150);
+            driveRobot(25.5);
             spinRobot(-82.5);
-            driveRobot(-53.5);
-            spinRobot(-55.5);
-            driveRobot(-44.5);
-            spinRobot(190);
-            dropToken();
-            driveRobot(-93);
+            //driveRobot(-53.5);
+            //spinRobot(-55.5);
+            //driveRobot(-44.5);
+            //spinRobot(190);
+            //dropToken();
+            //driveRobot(-93);
         } else { // NE/SW
             spinRobot(165);
             driveRobot(-26.5);
