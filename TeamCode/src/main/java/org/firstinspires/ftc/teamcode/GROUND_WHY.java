@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="WHY", group="Pushbot")
-public class WHY extends LinearOpMode {
+@Autonomous(name="GROUND_WHY", group="Pushbot")
+public class GROUND_WHY extends LinearOpMode {
 
     private Spaceboy robot = new Spaceboy();   // Use a Pushbot's hardware
 
@@ -61,7 +61,7 @@ public class WHY extends LinearOpMode {
 
         waitForStart();
 
-        encoderHook(30, 35, 10);  //Hook going up is POSITIVE distance
+        //encoderHook(30, 35, 10);  //Hook going up is POSITIVE distance
 
         test();
 

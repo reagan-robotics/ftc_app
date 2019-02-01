@@ -61,8 +61,8 @@ public class Spaceboy
     public DcMotor  motorRight  = null;
     public DcMotor  liftoffHook = null;
     public Servo    tokenDrop   = null;
-    public static double ARM_UP_POWER = 100;
-    public static double ARM_DOWN_POWER = -100;
+    public static double ARM_UP_POWER = 100000;
+    public static double ARM_DOWN_POWER = -100000;
     public static double ARM_UP_INCHES = 5;
     public static double ARM_DOWN_INCHES = -5;
     public TouchSensor hookTouch = null;
