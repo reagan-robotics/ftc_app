@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="HALP2", group="Pushbot")
-public class HALP2 extends LinearOpMode {
+@Autonomous(name="NOT DONE JUST PARK", group="Pushbot")
+public class JUST_PARK extends LinearOpMode {
 
     private Spaceboy robot = new Spaceboy();   // Use a Pushbot's hardware
 
@@ -27,12 +27,12 @@ public class HALP2 extends LinearOpMode {
     static final double WHEEL_DIAMETER_INCHES = 4.5;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * Math.PI);
-    static final double HOOK_PER_MOTOR_REV = 420;
+    static final double HOOK_PER_MOTOR_REV = 460;
     static final double AXLE_DIAMETER_INCHES = 0.35;
     static final double HOOK_COUNTS_PER_INCH = (HOOK_PER_MOTOR_REV * 1 /
             (AXLE_DIAMETER_INCHES * Math.PI));
-    static final double DRIVE_SPEED = 0.35;
-    static final double TURN_SPEED = 0.2;
+    static final double DRIVE_SPEED = 0.20;
+    static final double TURN_SPEED = 0.1;
 
     @Override
     public void runOpMode() {
@@ -61,7 +61,7 @@ public class HALP2 extends LinearOpMode {
 
         waitForStart();
 
-        //encoderHook(.75, 40, 10);  //Hook going up is POSITIVE distance
+        //encoderHook(30, 35, 10);  //Hook going up is POSITIVE distance
 
         test();
 
@@ -72,25 +72,24 @@ public class HALP2 extends LinearOpMode {
     private void test() {
         //lowerRobot();
         if (robot.autoSelect.isPressed()) { // NW/SE //Down into the crater
-            //spinRobot(145);
-            //driveRobot(20.5);
-            //spinRobot(90);
-            //driveRobot(54);
-            //spinRobot(-44.8);
-            //driveRobot(50.5);
-            //dropToken();
-            //driveRobot(-93);
-        } else { // NE/SW //Up to the depot
-            //spinRobot(165);
-            driveRobot(17.5);
-            spinRobot(80);
+            driveRobot(14.5); //16.5
+            spinRobot(75);  //90
             driveRobot(40);
-            spinRobot(-115);
-            //driveRobot(10.5);
-            //spinRobot(-90);
-            driveRobot(50);
+            spinRobot(65);
+            driveRobot(40.5);
             dropToken();
-            driveRobot(-90);
+            driveRobot(-93);
+        } else { // NE/SW //Up to the depot
+            driveRobot(14.5);
+            spinRobot(90);
+            driveRobot(55.5);
+            //spinRobot(-122.5);
+            //driveRobot(49);
+            //dropToken();
+            //spinRobot(180);
+            //driveRobot(-70);
+            //spinRobot(-180);
+            //driveRobot(40);
         }
 
 
@@ -306,13 +305,13 @@ public class HALP2 extends LinearOpMode {
     }
     private void dropToken() {
 
-        robot.tokenDrop.setPosition(-0.5);
+        robot.tokenDrop.setPosition(1);
         try{
             Thread.sleep(2000);
         }catch(InterruptedException e){
             System.out.println("got interrupted!");
         }
-        robot.tokenDrop.setPosition(-0.75);
+        robot.tokenDrop.setPosition(0.2);
     }
     private void resetHook()
     {
@@ -324,35 +323,7 @@ public class HALP2 extends LinearOpMode {
         robot.liftoffHook.setPower(0);
         robot.liftoffHook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    private void HI() {
-        lowerRobot();
-        //spinRobot(145);
-        //driveRobot(-22.5);
-
-        if (robot.autoSelect.isPressed()) { // NW/SE
-            spinRobot(150);
-            driveRobot(-25.5);
-            spinRobot(-82.5);
-            driveRobot(-53.5);
-            spinRobot(-55.5);
-            driveRobot(-44.5);
-            spinRobot(190);
-            dropToken();
-            driveRobot(-93);
-        } else { // NE/SW
-            spinRobot(165);
-            driveRobot(15);
-            spinRobot(100);
-            driveRobot(50);
-            //driveRobot(-20);
-            //spinRobot(41);
-            spinRobot(180);
-            dropToken();
-            driveRobot(-90);
-        }
-    }
-
     public void lowerRobot() {
-        encoderHook(.75, 23, 10);  //Hook going up is POSITIVE distance
+        encoderHook(.75, 40, 10);  //Hook going up is POSITIVE distance
     }
 }

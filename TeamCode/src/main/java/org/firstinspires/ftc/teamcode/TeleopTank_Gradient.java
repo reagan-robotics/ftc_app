@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
@@ -56,9 +55,7 @@ public class TeleopTank_Gradient extends OpMode{
     /*
      * Code to run ONCE when the driver hits INIT
      */
-    boolean inverse = false;
-    double L=.50;
-    //double R=.50;
+    double W=.5;
     @Override
     public void init() {
         /* Initialize the hardware variables.
@@ -67,7 +64,7 @@ public class TeleopTank_Gradient extends OpMode{
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Hiya Person :P ");    //
     }
 
     /*
@@ -92,42 +89,16 @@ public class TeleopTank_Gradient extends OpMode{
         double left;
         double right;
 
-        if (gamepad1.x) {
-            L = .2;
-            L = .2;
+        if(gamepad1.x){
+            W=.2;
         }
-        if (gamepad1.b) {
-            L = .50;
-            L = .50;
+         if(gamepad1.b){
+            W=.5;
         }
-        /*a=inverse, y=normal*/
-
-        if (gamepad1.a) {
-            L = -L;
-            //inverse = true
-
-
-            this.resetStartTime();
-            while (this.getRuntime() < 0.25) {
-            }
-
-        }
-        //if (gamepad1.y){
-        //inverse = false
-        //}
-
-
-
+        
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        //if (inverse == false){
-        left = L*-gamepad1.left_stick_y;
-        right = L*-gamepad1.right_stick_y;
-        //}
-
-        //if (inverse == true){
-        //left = L*-gamepad1.right_stick_y;
-        //right = L*-gamepad1.left_stick_y;
-        //}
+        left = W*-gamepad1.left_stick_y;
+        right = W*-gamepad1.right_stick_y;
 
         robot.motorLeft.setPower(Math.signum(left)*((Math.pow(Math.abs(left),1))));
         robot.motorRight.setPower(Math.signum(right)*(Math.pow(Math.abs(right),1)));

@@ -31,7 +31,7 @@ public class GROUND_WHY extends LinearOpMode {
     static final double AXLE_DIAMETER_INCHES = 0.35;
     static final double HOOK_COUNTS_PER_INCH = (HOOK_PER_MOTOR_REV * 1 /
             (AXLE_DIAMETER_INCHES * Math.PI));
-    static final double DRIVE_SPEED = 0.35;
+    static final double DRIVE_SPEED = 0.20;
     static final double TURN_SPEED = 0.1;
 
     @Override
@@ -61,7 +61,8 @@ public class GROUND_WHY extends LinearOpMode {
 
         waitForStart();
 
-        //encoderHook(30, 35, 10);  //Hook going up is POSITIVE distance
+        //this is our new lower hook
+        //encoderHook(30, 27, 10);  //Hook going up is POSITIVE distance
 
         test();
 
@@ -74,20 +75,28 @@ public class GROUND_WHY extends LinearOpMode {
         if (robot.autoSelect.isPressed()) { // NW/SE //Down into the crater
             driveRobot(14.5); //16.5
             spinRobot(75);  //90
-            driveRobot(40);
+            driveRobot(45);
             spinRobot(65);
             driveRobot(40.5);
             dropToken();
             driveRobot(-93);
-        } else { // NE/SW //Up to the depot
-            driveRobot(14.5);
-            spinRobot(80);
-            driveRobot(40);
-            spinRobot(-118);
-            driveRobot(45);
+        } //else { // NE/SW //Up to the depot
+        //driveRobot(16);
+        //spinRobot(80);
+        //driveRobot(47);
+        //spinRobot(-122.5);
+        //driveRobot(49);
+        //dropToken();
+        //driveRobot(-73);
+        else { // NE/SW //Up to the depot
+            driveRobot(18);
+            spinRobot(-95);
+            driveRobot(-50);
+            spinRobot(51);
+            driveRobot(49);
             dropToken();
-            spinRobot(180);
-            driveRobot(85);
+            //spinRobot(180);
+            driveRobot(-73);
         }
 
 
@@ -162,52 +171,55 @@ public class GROUND_WHY extends LinearOpMode {
 
         // restart imu movement tracking.
         resetAngle();
+        if(opModeIsActive()) {
+            // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+            // clockwise (right).
 
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        // clockwise (right).
+            if (degrees < 0) {   // turn right.
+                leftPower = power;
+                rightPower = -power;
+            } else if (degrees > 0) {   // turn left.
+                leftPower = -power;
+                rightPower = power;
+            } else return;
 
-        if (degrees < 0) {   // turn right.
-            leftPower = power;
-            rightPower = -power;
-        } else if (degrees > 0) {   // turn left.
-            leftPower = -power;
-            rightPower = power;
-        } else return;
+            // set power to rotate.
+            robot.motorLeft.setPower(leftPower);
+            robot.motorRight.setPower(rightPower);
 
-        // set power to rotate.
-        robot.motorLeft.setPower(leftPower);
-        robot.motorRight.setPower(rightPower);
+            // rotate until turn is completed.
+            if (degrees < 0) {
+                // On right turn we have to get off zero first.
+                while (opModeIsActive() && getAngle() == 0) {
+                    telemetry.addData("right turn off 0", getAngle());
+                    telemetry.update();
+                }
 
-        // rotate until turn is completed.
-        if (degrees < 0) {
-            // On right turn we have to get off zero first.
-            while (opModeIsActive() && getAngle() == 0) {
-                telemetry.addData("right turn off 0", getAngle());
-                telemetry.update();
+                while (opModeIsActive() && getAngle() > degrees) {
+                    telemetry.addData("right turn", getAngle());
+                    telemetry.update();
+                }
+            } else {    // left turn.
+                while (opModeIsActive() && getAngle() < degrees) {
+                    telemetry.addData("left turn", getAngle());
+                    telemetry.update();
+                }
             }
 
-            while (opModeIsActive() && getAngle() > degrees) {
-                telemetry.addData("right turn", getAngle());
-                telemetry.update();
+            // turn the motors off.
+            robot.motorRight.setPower(0);
+            robot.motorLeft.setPower(0);
+
+            double delta = Math.abs(getAngle() - degrees);
+            if (delta > 0.5) {
+                rotate((degrees - getAngle()), 0.02);
             }
-        } else {    // left turn.
-            while (opModeIsActive() && getAngle() < degrees) {
-                telemetry.addData("left turn", getAngle());
-                telemetry.update();
-            }
+
+            // reset angle tracking on new heading.
+            resetAngle();
         }
-
-        // turn the motors off.
         robot.motorRight.setPower(0);
         robot.motorLeft.setPower(0);
-
-        double delta = Math.abs(getAngle() - degrees);
-        if (delta > 0.5) {
-            rotate((degrees - getAngle()), 0.02);
-        }
-
-        // reset angle tracking on new heading.
-        resetAngle();
     }
 
     public void encoderHook(double speed,

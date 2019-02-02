@@ -118,7 +118,7 @@ public class Start_Hook extends LinearOpMode {
         // lower the robot
 
         resetHook();
-        encoderHook(5,16,10);
+        encoderHook(5,14,10);
         //if(true){  // THIS IS WHERE THE LOGIC GOES FOR WHERE WE ARE!
             //encoderHook(.75,20,5);
             //stop();
